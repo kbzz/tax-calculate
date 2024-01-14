@@ -23,7 +23,6 @@ function calculateMonthlyTax(float $taxableIncome, float $taxTotal): float
 {
     // 初始化税额
     $tax = 0;
-
     // 遍历税率和速算扣除数来计算税额
     foreach (TAX_RATES as $threshold => $rateInfo) {
         [$rate, $quickDeduction, $lowerLimit] = $rateInfo;
