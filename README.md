@@ -42,4 +42,3 @@ echo calculateFlexibleIncomeTax($data);
 
 ## 维护者信息
 有关此项目的任何问题，请联系我。
-```
