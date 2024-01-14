@@ -14,24 +14,22 @@
 
 ### 固定工资税后收入计算
 ```php
-echo calculateFixedIncomeTax(10000, 351, 400, 5000);
+echo calculateFixedIncomeTax(10000, 351, 400);
 ```
 参数说明：
 - `$income`: 月固定收入金额。
 - `$insure`: 每月社保和公积金等扣除金额。
 - `$special`: 每月的专项扣除金额。
-- `$taxFreeThreshold`: 每月的免税额度。
 
 ### 灵活工资税后收入计算
 ```php
 $data = [
     // ... （此处包含12个月的数据）
 ];
-echo calculateFlexibleIncomeTax($data, 5000);
+echo calculateFlexibleIncomeTax($data);
 ```
 参数说明：
 - `$data`: 一个关联数组，每个元素包含一个月的`income`（收入），`insure`（社保和公积金扣除）和`special`（专项扣除）。
-- `$taxFreeThreshold`: 每月的免税额度。
 
 ## 依赖关系
 无特定外部依赖。确保PHP环境已安装且可运行。
@@ -41,7 +39,30 @@ echo calculateFlexibleIncomeTax($data, 5000);
 
 ## 示例
 ```php
-// 示例代码...
+/**
+ * 计算月度个人所得税。
+ *
+ * @param float $taxableIncome 累积应纳税所得额
+ * @param float $taxTotal      已缴税总额
+ *
+ * @return float 应缴税额
+ */
+function calculateMonthlyTax(float $taxableIncome, float $taxTotal): float
+{
+    // 初始化税额
+    $tax = 0;
+    // 遍历税率和速算扣除数来计算税额
+    foreach (TAX_RATES as $threshold => $rateInfo) {
+        [$rate, $quickDeduction, $lowerLimit] = $rateInfo;
+        if ($taxableIncome > $lowerLimit && $taxableIncome <= $threshold) {
+            $tax = $taxableIncome * $rate - $quickDeduction;
+            break;
+        }
+    }
+
+    // 返回计算结果，减去已缴税总额
+    return round($tax, 2) - $taxTotal;
+}
 ```
 
 ## 错误处理
