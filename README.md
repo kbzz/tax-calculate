@@ -37,34 +37,6 @@ echo calculateFlexibleIncomeTax($data);
 ## 函数说明
 - `calculateMonthlyTax($taxableIncome, $taxTotal)`: 此辅助函数负责根据应纳税所得额和已累计缴纳税额计算个人所得税。需要用户根据实际税率情况实现。
 
-## 示例
-```php
-/**
- * 计算月度个人所得税。
- *
- * @param float $taxableIncome 累积应纳税所得额
- * @param float $taxTotal      已缴税总额
- *
- * @return float 应缴税额
- */
-function calculateMonthlyTax(float $taxableIncome, float $taxTotal): float
-{
-    // 初始化税额
-    $tax = 0;
-    // 遍历税率和速算扣除数来计算税额
-    foreach (TAX_RATES as $threshold => $rateInfo) {
-        [$rate, $quickDeduction, $lowerLimit] = $rateInfo;
-        if ($taxableIncome > $lowerLimit && $taxableIncome <= $threshold) {
-            $tax = $taxableIncome * $rate - $quickDeduction;
-            break;
-        }
-    }
-
-    // 返回计算结果，减去已缴税总额
-    return round($tax, 2) - $taxTotal;
-}
-```
-
 ## 错误处理
 当前版本的函数不会返回错误信息。如果输入参数不合理（例如，负数或非数字值），函数的行为可能是未定义的。
 
